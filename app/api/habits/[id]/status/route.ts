@@ -7,7 +7,7 @@ type Completion = {
 };
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDb();
@@ -17,14 +17,14 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const habitId = params.id;
+    const { id } = await params;
     const { searchParams } = new URL(req.url);
 
     const date =
       searchParams.get("date") || new Date().toISOString().split("T")[0];
 
     // Verify habit exists and belongs to user
-    const habit = await Habit.findOne({ _id: habitId, userId });
+    const habit = await Habit.findOne({ _id: id, userId });
     if (!habit) {
       return NextResponse.json({ error: "Habit not found" }, { status: 404 });
     }
@@ -34,7 +34,7 @@ export async function GET(
     );
 
     return NextResponse.json({
-      habitId,
+      id,
       date,
       completed,
     });
