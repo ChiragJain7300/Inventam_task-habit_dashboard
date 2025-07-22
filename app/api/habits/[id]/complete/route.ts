@@ -10,7 +10,7 @@ type Context = {
     id: string;
   };
 };
-export async function POST(req: NextRequest, context: Context) {
+export async function POST(req: NextRequest, { params }: Context) {
   try {
     await connectDb();
 
@@ -20,8 +20,8 @@ export async function POST(req: NextRequest, context: Context) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const habitId = context.params.id;
-    const habit = await Habit.findOne({ _id: habitId, userId });
+    const { id } = await params;
+    const habit = await Habit.findOne({ _id: id, userId });
 
     if (!habit) {
       return NextResponse.json({ error: "Habit not found" }, { status: 404 });
