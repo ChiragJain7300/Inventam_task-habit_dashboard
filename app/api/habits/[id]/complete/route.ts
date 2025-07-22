@@ -5,12 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 type Completion = {
   date: string; // format: 'YYYY-MM-DD'
 };
-type Context = {
-  params: {
-    id: string;
-  };
-};
-export async function POST(req: NextRequest, { id }: { id: string }) {
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDb();
 
@@ -19,7 +18,7 @@ export async function POST(req: NextRequest, { id }: { id: string }) {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    const { id } = await params;
     const habit = await Habit.findOne({ _id: id, userId });
 
     if (!habit) {
