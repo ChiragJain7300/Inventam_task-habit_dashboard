@@ -5,10 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 type Completion = {
   date: string; // format: 'YYYY-MM-DD'
 };
-export async function POST(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+type Context = {
+  params: {
+    id: string;
+  };
+};
+export async function POST(req: NextRequest, context: Context) {
   try {
     await connectDb();
 
