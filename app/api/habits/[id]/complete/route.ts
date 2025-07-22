@@ -7,7 +7,7 @@ type Completion = {
 };
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     await connectDb();
@@ -18,7 +18,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const habitId = params.id;
+    const habitId = context.params.id;
     const habit = await Habit.findOne({ _id: habitId, userId });
 
     if (!habit) {
