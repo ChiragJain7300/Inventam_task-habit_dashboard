@@ -13,7 +13,7 @@ Built with **Next.js 15 App Router**, **MongoDB**, and **JWT authentication**.
 
 ---
 
-## 🚀 Features
+##  Features
 
 - Token-based authentication (JWT)
 - Add new habits
